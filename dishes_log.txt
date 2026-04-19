@@ -1,0 +1,5 @@
+DISH:Chicken Sandwich
+  - Chicken breast (100.0g) | Protein: 31.00g | Carbs: 0.00g | Fats: 3.60g
+  - Sandwich (50.0g) | Protein: 4.00g | Carbs: 25.00g | Fats: 1.50g
+  TOTAL Protein: 35.00g | Carbs: 25.00g | Fats: 5.10g
+END
