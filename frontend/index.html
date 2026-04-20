@@ -126,6 +126,36 @@
                 </div>
             </div>
         </div>
+
+        <!-- Add New Ingredient Modal -->
+        <div id="new-ingredient-modal" class="modal">
+            <div class="modal-content card">
+                <h3>Add New Ingredient</h3>
+                <p class="modal-desc">Enter nutritional values <strong>per 100g</strong>.</p>
+                <div class="input-grid">
+                    <div class="input-field">
+                        <label>Name</label>
+                        <input type="text" id="new-ing-name" readonly>
+                    </div>
+                    <div class="input-field">
+                        <label>Protein (g)</label>
+                        <input type="number" id="new-ing-p" step="0.1" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label>Carbs (g)</label>
+                        <input type="number" id="new-ing-c" step="0.1" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label>Fats (g)</label>
+                        <input type="number" id="new-ing-f" step="0.1" value="0">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button id="save-new-ing-btn" class="primary">Save to Database</button>
+                    <button id="close-new-modal-btn" class="secondary">Cancel</button>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="app.js"></script>
 </body>

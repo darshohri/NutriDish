@@ -26,7 +26,16 @@ DISH:oats
   TOTAL Protein: 20.00g | Carbs: 71.00g | Fats: 11.00g
 END
 DISH:ice cream
-  - Milk (50.0g) | Protein: 1.50g | Carbs: 2.50g | Fats: 2.00g
+  - Milk (whole) (100.0g) | Protein: 3.00g | Carbs: 5.00g | Fats: 3.00g
   - Sugar (white) (20.0g) | Protein: 0.00g | Carbs: 20.00g | Fats: 0.00g
-  TOTAL Protein: 1.50g | Carbs: 22.50g | Fats: 2.00g
+  TOTAL Protein: 3.00g | Carbs: 25.00g | Fats: 3.00g
+END
+DISH:cake
+  - chocolate (100.0g) | Protein: 3.00g | Carbs: 30.00g | Fats: 60.00g
+  TOTAL Protein: 3.00g | Carbs: 30.00g | Fats: 60.00g
+END
+DISH:french fries
+  - Potato (100.0g) | Protein: 2.00g | Carbs: 17.00g | Fats: 0.00g
+  - salt (100.0g) | Protein: 1.00g | Carbs: 20.00g | Fats: 20.00g
+  TOTAL Protein: 3.00g | Carbs: 37.00g | Fats: 20.00g
 END

@@ -268,8 +268,8 @@ button.secondary {
 }
 
 .modal-content {
-    width: 90%;
-    max-width: 400px;
+    width: 95%;
+    max-width: 480px;
 }
 
 .macro-details {
@@ -284,6 +284,54 @@ button.secondary {
     border-radius: 8px;
     font-size: 0.85rem;
     font-weight: 600;
+}
+
+.modal-desc {
+    color: var(--text-muted);
+    margin-bottom: 24px;
+    font-size: 0.95rem;
+}
+
+.input-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.input-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.input-field label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.input-field input {
+    padding: 10px 14px;
+    background: var(--bg-color);
+    width: 100%;
+    min-width: 0;
+}
+
+.input-field input[readonly] {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.autocomplete-items div.add-new-option {
+    background: var(--accent-bg);
+    color: var(--accent);
+    border-top: 1px solid var(--border);
+    font-weight: 600;
+}
+
+.autocomplete-items div.add-new-option:hover {
+    background: rgba(255, 71, 87, 0.15);
 }
 
 .weight-input {

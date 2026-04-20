@@ -101,6 +101,29 @@ public class WebServer {
             }
         });
 
+        // API Handler for adding a new ingredient to database
+        server.createContext("/api/add-ingredient", (exchange) -> {
+            if ("POST".equalsIgnoreCase(exchange.getRequestMethod())) {
+                try {
+                    InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
+                    BufferedReader br = new BufferedReader(isr);
+                    String body = br.lines().collect(Collectors.joining());
+
+                    String name = extractJsonValue(body, "name");
+                    double p = Double.parseDouble(extractJsonValue(body, "proteinPerGram"));
+                    double c = Double.parseDouble(extractJsonValue(body, "carbsPerGram"));
+                    double f = Double.parseDouble(extractJsonValue(body, "fatsPerGram"));
+
+                    csvReader.addIngredientToCSV(name, p, c, f);
+                    sendResponse(exchange, 200, "{\"status\":\"added\"}", "application/json");
+                } catch (Exception e) {
+                    sendResponse(exchange, 400, "{\"error\":\"" + e.getMessage() + "\"}", "application/json");
+                }
+            } else {
+                sendResponse(exchange, 405, "Method Not Allowed", "text/plain");
+            }
+        });
+
         // API Handler for retrieving logged dishes
         server.createContext("/api/logged-dishes", (exchange) -> {
             String json = dishLogger.getLoggedDishesJSON();

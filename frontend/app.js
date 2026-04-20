@@ -42,6 +42,14 @@ const modalWeight = document.getElementById('result-weight');
 const addIngBtn = document.getElementById('add-ingredient-btn');
 const closeModalBtn = document.getElementById('close-modal-btn');
 
+const newIngModal = document.getElementById('new-ingredient-modal');
+const newIngNameInput = document.getElementById('new-ing-name');
+const newIngPInput = document.getElementById('new-ing-p');
+const newIngCInput = document.getElementById('new-ing-c');
+const newIngFInput = document.getElementById('new-ing-f');
+const saveNewIngBtn = document.getElementById('save-new-ing-btn');
+const closeNewModalBtn = document.getElementById('close-new-modal-btn');
+
 // --- Step Logic ---
 function goToStep(stepNum) {
     steps.forEach(s => s.classList.remove('active'));
@@ -129,15 +137,15 @@ ingredientSearch.oninput = (e) => {
         try {
             const res = await fetch(`/api/search?q=${encodeURIComponent(val)}`);
             const results = await res.json();
-            showAutocomplete(results);
+            showAutocomplete(results, val);
         } catch (err) {
             console.error("Search failed", err);
         }
     }, 300);
 };
 
-function showAutocomplete(items) {
-    if (items.length === 0) return;
+function showAutocomplete(items, query) {
+    autocompleteList.innerHTML = "";
     
     items.forEach(item => {
         const div = document.createElement('div');
@@ -148,6 +156,16 @@ function showAutocomplete(items) {
         };
         autocompleteList.appendChild(div);
     });
+
+    // Add "Add New" option
+    const addNew = document.createElement('div');
+    addNew.className = 'add-new-option';
+    addNew.textContent = `+ Add "${query}" as new`;
+    addNew.onclick = () => {
+        openAddNewModal(query);
+        closeAutocomplete();
+    };
+    autocompleteList.appendChild(addNew);
 }
 
 function closeAutocomplete() {
@@ -292,4 +310,73 @@ function resetApp() {
 }
 
 closeModalBtn.onclick = closeModal;
-window.onclick = (e) => { if (e.target == modal) closeModal(); };
+
+function openAddNewModal(name) {
+    newIngNameInput.value = name;
+    newIngPInput.value = 0;
+    newIngCInput.value = 0;
+    newIngFInput.value = 0;
+    newIngModal.style.display = 'flex';
+}
+
+function closeNewModal() {
+    newIngModal.style.display = 'none';
+    ingredientSearch.value = "";
+}
+
+saveNewIngBtn.onclick = async () => {
+    const name = newIngNameInput.value;
+    const p100 = parseFloat(newIngPInput.value) || 0;
+    const c100 = parseFloat(newIngCInput.value) || 0;
+    const f100 = parseFloat(newIngFInput.value) || 0;
+
+    if (!name) return;
+
+    // Convert to per gram
+    const p = p100 / 100;
+    const c = c100 / 100;
+    const f = f100 / 100;
+
+    try {
+        const res = await fetch('/api/add-ingredient', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: name,
+                proteinPerGram: p,
+                carbsPerGram: c,
+                fatsPerGram: f
+            })
+        });
+
+        if (res.ok) {
+            // Also add to current dish automatically
+            const newIng = {
+                name: name,
+                weight: 100, // Default weight
+                proteinPerGram: p,
+                carbsPerGram: c,
+                fatsPerGram: f,
+                calculated: {
+                    p: p * 100,
+                    c: c * 100,
+                    f: f * 100
+                }
+            };
+            currentDish.ingredients.push(newIng);
+            updateBuilderUI();
+            closeNewModal();
+        } else {
+            alert("Error saving ingredient.");
+        }
+    } catch (err) {
+        console.error("Save failed", err);
+    }
+};
+
+closeNewModalBtn.onclick = closeNewModal;
+
+window.onclick = (e) => { 
+    if (e.target == modal) closeModal(); 
+    if (e.target == newIngModal) closeNewModal();
+};
