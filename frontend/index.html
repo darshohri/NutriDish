@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriDish | Premium Nutrition Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-top">
+                <div class="brand">
+                    <img src="logo.png" alt="NutriDish Logo" class="logo">
+                    <h1 id="main-title">Nutri<span>Dish</span></h1>
+                </div>
+                <button id="view-logged-btn" class="text-btn">Logged Dishes</button>
+            </div>
+            <p class="subtitle">Premium Meal Nutrition Builder</p>
+        </header>
+
+        <main>
+            <!-- Step 1: Dish Name -->
+            <section id="step-1" class="step active">
+                <div class="card">
+                    <h2 class="step-title">Starting a new dish?</h2>
+                    <p class="step-desc">Enter a name for your culinary creation to begin.</p>
+                    <div class="input-group">
+                        <input type="text" id="dish-name-input" placeholder="e.g. Morning Protein Oats">
+                        <button id="start-btn" class="primary">Next Step</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 2: Build Ingredients -->
+            <section id="step-2" class="step">
+                <div class="card builder-card">
+                    <div class="builder-header">
+                        <h2 id="display-dish-name">My Dish</h2>
+                        <button id="back-to-1" class="text-btn">Edit Name</button>
+                    </div>
+
+                    <div class="search-container">
+                        <div class="input-group">
+                            <input type="text" id="ingredient-search" placeholder="Type ingredient (e.g. Chicken)..." autocomplete="off">
+                            <div id="autocomplete-list" class="autocomplete-items"></div>
+                        </div>
+                    </div>
+
+                    <div id="ingredients-list" class="ingredients-list">
+                        <div class="empty-state">Add your first ingredient above.</div>
+                    </div>
+
+                    <div class="builder-actions">
+                        <button id="analyze-btn" class="primary" disabled>Analyze Dish</button>
+                        <button id="reset-btn" class="secondary">Reset</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 3: Analysis & Summary -->
+            <section id="step-3" class="step">
+                <div class="card summary-card">
+                    <h2 class="step-title">Nutritional Analysis</h2>
+                    <p class="step-desc">Here is the breakdown for <strong id="summary-dish-name"></strong>:</p>
+                    
+                    <div class="macro-grid">
+                        <div class="macro-box">
+                            <span class="macro-label">Protein</span>
+                            <span id="total-protein" class="macro-value">0.00g</span>
+                        </div>
+                        <div class="macro-box">
+                            <span class="macro-label">Carbs</span>
+                            <span id="total-carbs" class="macro-value">0.00g</span>
+                        </div>
+                        <div class="macro-box">
+                            <span class="macro-label">Fats</span>
+                            <span id="total-fats" class="macro-value">0.00g</span>
+                        </div>
+                    </div>
+
+                    <div class="summary-details">
+                        <div id="summary-list"></div>
+                    </div>
+
+                    <div class="final-actions">
+                        <button id="save-dish-btn" class="primary">Save to Log</button>
+                        <button id="back-to-2" class="secondary">Add More Ingredients</button>
+                    </div>
+                </div>
+            </section>
+            <!-- Step 4: Logged Dishes -->
+            <section id="step-logged" class="step">
+                <div class="card logged-card">
+                    <div class="logged-header">
+                        <h2 class="step-title">Logged Dishes</h2>
+                        <button id="back-from-logged" class="text-btn">Back to Builder</button>
+                    </div>
+                    <p class="step-desc">Your previously saved culinary creations.</p>
+                    
+                    <div id="logged-dishes-list" class="logged-list">
+                        <!-- Logged dishes will be injected here -->
+                        <div class="empty-state">No dishes logged yet.</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Search Results Modal -->
+        <div id="result-modal" class="modal">
+            <div class="modal-content card">
+                <h3 id="result-name">Ingredient Name</h3>
+                <div class="macro-details">
+                    <div class="macro-mini">P: <span id="result-p">0</span>g</div>
+                    <div class="macro-mini">C: <span id="result-c">0</span>g</div>
+                    <div class="macro-mini">F: <span id="result-f">0</span>g</div>
+                </div>
+                <div class="weight-input">
+                    <label>Weight (grams):</label>
+                    <input type="number" id="result-weight" value="100">
+                </div>
+                <div class="modal-actions">
+                    <button id="add-ingredient-btn" class="primary">Add to Dish</button>
+                    <button id="close-modal-btn" class="secondary">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
