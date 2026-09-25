@@ -34,7 +34,7 @@ public class Main {
             }
 
             if (!skipDish) {
-                Dish currentDish = new Dish(dishName, 10);
+                Dish currentDish = new Dish(dishName);
 
                 String addMore;
                 do {

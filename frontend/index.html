@@ -4,18 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NutriDish | Premium Nutrition Tracker</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="style.css?v=8">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Premium Animation Libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hover.css/2.3.1/css/hover-min.css" integrity="sha512-csw0/t11+F00Q0a7gT0F8/XN0O0G6/24D0XgM/f6NlV1p3HlUuN/N9sUcw0P/H6GjA05sQnI4T63c/Jt/aBQQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
+    <script src="https://unpkg.com/scrollreveal"></script>
 </head>
 <body>
+    <!-- Toast Notification Container -->
+    <div id="toast-container"></div>
+    
     <div class="container">
         <header>
             <div class="header-top">
-                <div class="brand">
-                    <img src="logo.png" alt="NutriDish Logo" class="logo">
-                    <h1 id="main-title">Nutri<span>Dish</span></h1>
-                </div>
-                <button id="view-logged-btn" class="text-btn">Logged Dishes</button>
+                <a href="/landing.html" style="text-decoration: none; color: inherit;">
+                    <div class="brand">
+                        <img src="logo.png" alt="NutriDish Logo" class="logo hvr-bob">
+                        <h1 id="main-title">Nutri<span>Dish</span></h1>
+                    </div>
+                </a>
+                <button id="view-logged-btn" class="text-btn hvr-grow" style="display: inline-block !important; opacity: 1 !important; visibility: visible !important;">Logged Dishes</button>
             </div>
             <p class="subtitle">Premium Meal Nutrition Builder</p>
         </header>
@@ -28,24 +39,22 @@
                     <p class="step-desc">Enter a name for your culinary creation to begin.</p>
                     <div class="input-group">
                         <input type="text" id="dish-name-input" placeholder="e.g. Morning Protein Oats">
-                        <button id="start-btn" class="primary">Next Step</button>
+                        <button id="start-btn" class="primary hvr-glow">Next Step</button>
                     </div>
                 </div>
             </section>
 
-            <!-- Step 2: Build Ingredients -->
+            <!-- Step 2: Builder -->
             <section id="step-2" class="step">
                 <div class="card builder-card">
                     <div class="builder-header">
                         <h2 id="display-dish-name">My Dish</h2>
-                        <button id="back-to-1" class="text-btn">Edit Name</button>
+                        <button id="back-to-1" class="text-btn hvr-backward">Edit Name</button>
                     </div>
 
                     <div class="search-container">
-                        <div class="input-group">
-                            <input type="text" id="ingredient-search" placeholder="Type ingredient (e.g. Chicken)..." autocomplete="off">
-                            <div id="autocomplete-list" class="autocomplete-items"></div>
-                        </div>
+                        <input type="text" id="ingredient-search" placeholder="Search for an ingredient (e.g. Chicken)..." autocomplete="off">
+                        <div id="autocomplete-list" class="autocomplete-items"></div>
                     </div>
 
                     <div id="ingredients-list" class="ingredients-list">
@@ -53,76 +62,98 @@
                     </div>
 
                     <div class="builder-actions">
-                        <button id="analyze-btn" class="primary" disabled>Analyze Dish</button>
-                        <button id="reset-btn" class="secondary">Reset</button>
+                        <button id="analyze-btn" class="primary hvr-glow" disabled>Analyze Dish</button>
+                        <button id="reset-btn" class="secondary hvr-pulse">Reset</button>
+                    </div>
+
+                    <!-- Loading Overlay -->
+                    <div id="loading-overlay" class="loading-overlay" style="display: none;">
+                        <p>Calculating Nutrition...</p>
+                        <div class="progress-bar-container">
+                            <div id="progress-bar" class="progress-bar"></div>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Step 3: Analysis & Summary -->
+            <!-- Step 3: Summary -->
             <section id="step-3" class="step">
                 <div class="card summary-card">
-                    <h2 class="step-title">Nutritional Analysis</h2>
-                    <p class="step-desc">Here is the breakdown for <strong id="summary-dish-name"></strong>:</p>
+                    <div class="builder-header">
+                        <h2 id="summary-dish-name">My Dish Summary</h2>
+                    </div>
                     
                     <div class="macro-grid">
                         <div class="macro-box">
                             <span class="macro-label">Protein</span>
-                            <span id="total-protein" class="macro-value">0.00g</span>
+                            <span class="macro-value" id="total-protein">0g</span>
                         </div>
                         <div class="macro-box">
                             <span class="macro-label">Carbs</span>
-                            <span id="total-carbs" class="macro-value">0.00g</span>
+                            <span class="macro-value" id="total-carbs">0g</span>
                         </div>
                         <div class="macro-box">
                             <span class="macro-label">Fats</span>
-                            <span id="total-fats" class="macro-value">0.00g</span>
+                            <span class="macro-value" id="total-fats">0g</span>
                         </div>
                     </div>
 
-                    <div class="summary-details">
-                        <div id="summary-list"></div>
+                    <div id="summary-list" class="summary-details">
+                        <!-- Ingredient breakdown -->
                     </div>
 
                     <div class="final-actions">
-                        <button id="save-dish-btn" class="primary">Save to Log</button>
-                        <button id="back-to-2" class="secondary">Add More Ingredients</button>
+                        <button id="save-dish-btn" class="primary hvr-glow">Save to Log</button>
+                        <button id="back-to-2" class="secondary hvr-backward">Add More Ingredients</button>
                     </div>
                 </div>
             </section>
+
             <!-- Step 4: Logged Dishes -->
             <section id="step-logged" class="step">
                 <div class="card logged-card">
                     <div class="logged-header">
                         <h2 class="step-title">Logged Dishes</h2>
-                        <button id="back-from-logged" class="text-btn">Back to Builder</button>
+                        <button id="back-from-logged" class="text-btn hvr-backward">Back to Builder</button>
                     </div>
                     <p class="step-desc">Your previously saved culinary creations.</p>
                     
                     <div id="logged-dishes-list" class="logged-list">
-                        <!-- Logged dishes will be injected here -->
-                        <div class="empty-state">No dishes logged yet.</div>
+                        <!-- Dynamically populated -->
                     </div>
                 </div>
             </section>
         </main>
 
-        <!-- Search Results Modal -->
+        <!-- Delete Confirm Modal -->
+        <div id="delete-confirm-modal" class="modal">
+            <div class="modal-content card">
+                <h3>Confirm Deletion</h3>
+                <p class="modal-desc" id="delete-confirm-text">Are you sure you want to delete this dish?</p>
+                <div class="modal-actions">
+                    <button id="confirm-delete-btn" class="primary hvr-glow" style="background-color: #ff4757;">Delete</button>
+                    <button id="cancel-delete-btn" class="secondary hvr-pulse">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Modal -->
         <div id="result-modal" class="modal">
             <div class="modal-content card">
                 <h3 id="result-name">Ingredient Name</h3>
+                <p class="modal-desc">Nutritional values <strong>per 100g</strong>:</p>
                 <div class="macro-details">
                     <div class="macro-mini">P: <span id="result-p">0</span>g</div>
                     <div class="macro-mini">C: <span id="result-c">0</span>g</div>
                     <div class="macro-mini">F: <span id="result-f">0</span>g</div>
                 </div>
-                <div class="weight-input">
-                    <label>Weight (grams):</label>
-                    <input type="number" id="result-weight" value="100">
+                <div class="weight-input input-field">
+                    <label for="result-weight">Weight (grams):</label>
+                    <input type="number" id="result-weight" value="">
                 </div>
                 <div class="modal-actions">
-                    <button id="add-ingredient-btn" class="primary">Add to Dish</button>
-                    <button id="close-modal-btn" class="secondary">Cancel</button>
+                    <button id="add-ingredient-btn" class="primary hvr-glow">Add to Dish</button>
+                    <button id="close-modal-btn" class="secondary hvr-pulse">Cancel</button>
                 </div>
             </div>
         </div>
@@ -131,32 +162,34 @@
         <div id="new-ingredient-modal" class="modal">
             <div class="modal-content card">
                 <h3>Add New Ingredient</h3>
-                <p class="modal-desc">Enter nutritional values <strong>per 100g</strong>.</p>
+                <p class="modal-desc">Provide nutritional values per 100g to save to database.</p>
+                
+                <div class="input-field" style="margin-bottom: 16px;">
+                    <label for="new-ing-name">Ingredient Name:</label>
+                    <input type="text" id="new-ing-name">
+                </div>
+
                 <div class="input-grid">
                     <div class="input-field">
-                        <label>Name</label>
-                        <input type="text" id="new-ing-name" readonly>
+                        <label for="new-ing-p">Protein (per 100g):</label>
+                        <input type="number" id="new-ing-p" min="0" step="0.1">
                     </div>
                     <div class="input-field">
-                        <label>Protein (g)</label>
-                        <input type="number" id="new-ing-p" step="0.1" value="0">
+                        <label for="new-ing-c">Carbs (per 100g):</label>
+                        <input type="number" id="new-ing-c" min="0" step="0.1">
                     </div>
                     <div class="input-field">
-                        <label>Carbs (g)</label>
-                        <input type="number" id="new-ing-c" step="0.1" value="0">
-                    </div>
-                    <div class="input-field">
-                        <label>Fats (g)</label>
-                        <input type="number" id="new-ing-f" step="0.1" value="0">
+                        <label for="new-ing-f">Fats (per 100g):</label>
+                        <input type="number" id="new-ing-f" min="0" step="0.1">
                     </div>
                 </div>
                 <div class="modal-actions">
-                    <button id="save-new-ing-btn" class="primary">Save to Database</button>
-                    <button id="close-new-modal-btn" class="secondary">Cancel</button>
+                    <button id="save-new-ing-btn" class="primary hvr-glow">Save to Database</button>
+                    <button id="close-new-modal-btn" class="secondary hvr-pulse">Cancel</button>
                 </div>
             </div>
         </div>
     </div>
-    <script src="app.js"></script>
+    <script src="app.js?v=8"></script>
 </body>
 </html>

@@ -10,30 +10,27 @@ public class DishLogger {
     }
 
     public boolean dishExists(String dishName) {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.equals("DISH:" + dishName.trim())) {
-                    reader.close();
+                if (line.equalsIgnoreCase("DISH:" + dishName.trim())) {
                     return true;
                 }
             }
-            reader.close();
         } catch (IOException e) {
+            // File may not exist yet — that's fine, dish doesn't exist
             return false;
         }
         return false;
     }
 
     public void displaySavedDish(String dishName) {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             boolean inDish = false;
 
             while ((line = reader.readLine()) != null) {
-                if (line.equals("DISH:" + dishName.trim())) {
+                if (line.equalsIgnoreCase("DISH:" + dishName.trim())) {
                     inDish = true;
                 }
                 if (inDish) {
@@ -43,7 +40,6 @@ public class DishLogger {
                     break;
                 }
             }
-            reader.close();
         } catch (IOException e) {
             System.out.println("Error reading saved dish: " + e.getMessage());
         }
@@ -52,13 +48,13 @@ public class DishLogger {
     public void saveDish(Dish dish) {
         ArrayList<String> allLines = new ArrayList<>();
 
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             boolean skipping = false;
 
             while ((line = reader.readLine()) != null) {
-                if (line.equals("DISH:" + dish.dishName.trim())) {
+                // Case-insensitive match for overwrite
+                if (line.equalsIgnoreCase("DISH:" + dish.getDishName().trim())) {
                     skipping = true;
                 }
                 if (!skipping) {
@@ -68,32 +64,32 @@ public class DishLogger {
                     skipping = false;
                 }
             }
-            reader.close();
         } catch (IOException e) {
+            // File may not exist yet — that's okay, we'll create it
+            System.out.println("Note: No existing log file found, creating new one.");
         }
 
         double[] macros = dish.calculateTotalMacros();
 
-        allLines.add("DISH:" + dish.dishName);
-        for (int i = 0; i < dish.ingredientCount; i++) {
-            Ingredient ing = dish.ingredients[i];
-            allLines.add("  - " + ing.name + " (" + ing.weightInGrams + "g)"
-                    + " | Protein: " + String.format("%.2f", ing.protein) + "g"
-                    + " | Carbs: " + String.format("%.2f", ing.carbohydrates) + "g"
-                    + " | Fats: " + String.format("%.2f", ing.fats) + "g");
+        allLines.add("DISH:" + dish.getDishName());
+        ArrayList<Ingredient> ingredients = dish.getIngredients();
+        for (int i = 0; i < ingredients.size(); i++) {
+            Ingredient ing = ingredients.get(i);
+            allLines.add("  - " + ing.getName() + " (" + ing.getWeightInGrams() + "g)"
+                    + " | Protein: " + String.format("%.2f", ing.getProtein()) + "g"
+                    + " | Carbs: " + String.format("%.2f", ing.getCarbohydrates()) + "g"
+                    + " | Fats: " + String.format("%.2f", ing.getFats()) + "g");
         }
         allLines.add("  TOTAL Protein: " + String.format("%.2f", macros[0]) + "g"
                 + " | Carbs: " + String.format("%.2f", macros[1]) + "g"
                 + " | Fats: " + String.format("%.2f", macros[2]) + "g");
         allLines.add("END");
 
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false));
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
             for (String line : allLines) {
                 writer.write(line);
                 writer.newLine();
             }
-            writer.close();
             System.out.println("Dish saved to log.");
         } catch (IOException e) {
             System.out.println("Error saving dish: " + e.getMessage());
@@ -102,8 +98,7 @@ public class DishLogger {
 
     public String getLoggedDishesJSON() {
         StringBuilder json = new StringBuilder("[");
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             boolean first = true;
             String currentDishName = null;
@@ -114,25 +109,78 @@ public class DishLogger {
                 if (line.startsWith("DISH:")) {
                     currentDishName = line.substring(5).trim();
                 } else if (line.startsWith("TOTAL Protein:")) {
-                    // Example: TOTAL Protein: 30.00g | Carbs: 60.00g | Fats: 15.00g
-                    String[] parts = line.split("\\|");
-                    totalP = Double.parseDouble(parts[0].split(":")[1].trim().replace("g", ""));
-                    totalC = Double.parseDouble(parts[1].split(":")[1].trim().replace("g", ""));
-                    totalF = Double.parseDouble(parts[2].split(":")[1].trim().replace("g", ""));
+                    try {
+                        String[] parts = line.split("\\|");
+                        totalP = Double.parseDouble(parts[0].split(":")[1].trim().replace("g", ""));
+                        totalC = Double.parseDouble(parts[1].split(":")[1].trim().replace("g", ""));
+                        totalF = Double.parseDouble(parts[2].split(":")[1].trim().replace("g", ""));
+                    } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                        System.err.println("Warning: Could not parse totals for dish: " + currentDishName);
+                        totalP = 0; totalC = 0; totalF = 0;
+                    }
                 } else if (line.equals("END")) {
                     if (currentDishName != null) {
                         if (!first) json.append(",");
-                        json.append(String.format("{\"name\":\"%s\",\"protein\":%.2f,\"carbs\":%.2f,\"fats\":%.2f}", 
-                                    currentDishName, totalP, totalC, totalF));
+                        // Escape dish name for JSON safety
+                        String safeName = currentDishName
+                                .replace("\\", "\\\\")
+                                .replace("\"", "\\\"");
+                        json.append(String.format("{\"name\":\"%s\",\"protein\":%.2f,\"carbs\":%.2f,\"fats\":%.2f}",
+                                    safeName, totalP, totalC, totalF));
                         first = false;
                     }
+                    // Reset for next dish
+                    currentDishName = null;
+                    totalP = 0; totalC = 0; totalF = 0;
                 }
             }
-            reader.close();
         } catch (Exception e) {
             System.err.println("Error reading logged dishes: " + e.getMessage());
         }
         json.append("]");
         return json.toString();
+    }
+
+    public boolean deleteDish(String dishName) {
+        ArrayList<String> allLines = new ArrayList<>();
+        boolean dishFound = false;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            boolean skipping = false;
+
+            while ((line = reader.readLine()) != null) {
+                if (line.equalsIgnoreCase("DISH:" + dishName.trim())) {
+                    skipping = true;
+                    dishFound = true;
+                }
+                if (!skipping) {
+                    allLines.add(line);
+                }
+                if (skipping && line.equals("END")) {
+                    skipping = false;
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading log file for deletion: " + e.getMessage());
+            return false;
+        }
+
+        if (dishFound) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
+                for (String line : allLines) {
+                    writer.write(line);
+                    writer.newLine();
+                }
+                System.out.println("Dish '" + dishName + "' deleted successfully.");
+                return true;
+            } catch (IOException e) {
+                System.err.println("Error writing to log file during deletion: " + e.getMessage());
+                return false;
+            }
+        } else {
+            System.out.println("Dish '" + dishName + "' not found for deletion.");
+            return false;
+        }
     }
 }

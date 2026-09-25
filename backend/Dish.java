@@ -1,22 +1,29 @@
+import java.util.ArrayList;
+
 public class Dish {
 
-    String dishName;
-    Ingredient[] ingredients;
-    int ingredientCount;
+    private String dishName;
+    private ArrayList<Ingredient> ingredients;
 
-    public Dish(String dishName, int maxIngredients) {
+    public Dish(String dishName) {
         this.dishName = dishName;
-        this.ingredients = new Ingredient[maxIngredients];
-        this.ingredientCount = 0;
+        this.ingredients = new ArrayList<>();
+    }
+
+    public String getDishName() {
+        return dishName;
+    }
+
+    public ArrayList<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public int getIngredientCount() {
+        return ingredients.size();
     }
 
     public void addIngredient(Ingredient ingredient) {
-        if (ingredientCount < ingredients.length) {
-            ingredients[ingredientCount] = ingredient;
-            ingredientCount++;
-        } else {
-            System.out.println("Max ingredients reached for this dish.");
-        }
+        ingredients.add(ingredient);
     }
 
     public double[] calculateTotalMacros() {
@@ -24,10 +31,10 @@ public class Dish {
         double totalCarbs = 0;
         double totalFats = 0;
 
-        for (int i = 0; i < ingredientCount; i++) {
-            totalProtein += ingredients[i].protein;
-            totalCarbs += ingredients[i].carbohydrates;
-            totalFats += ingredients[i].fats;
+        for (Ingredient ing : ingredients) {
+            totalProtein += ing.getProtein();
+            totalCarbs += ing.getCarbohydrates();
+            totalFats += ing.getFats();
         }
 
         return new double[]{totalProtein, totalCarbs, totalFats};
@@ -36,8 +43,8 @@ public class Dish {
     public void displayDish() {
         System.out.println("\n=== Dish: " + dishName + " ===");
         System.out.println("Ingredients:");
-        for (int i = 0; i < ingredientCount; i++) {
-            ingredients[i].display();
+        for (Ingredient ing : ingredients) {
+            ing.display();
         }
 
         double[] macros = calculateTotalMacros();

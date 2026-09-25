@@ -7,10 +7,29 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class WebServer {
 
     private static final int PORT = 8080;
+    private static final Map<String, Long> rateLimits = new ConcurrentHashMap<>();
+    
+    private static boolean checkRateLimit(HttpExchange exchange) {
+        String ip = exchange.getRemoteAddress().getAddress().getHostAddress();
+        long now = System.currentTimeMillis();
+        long last = rateLimits.getOrDefault(ip, 0L);
+        if (now - last < 300) { // 300ms limit
+            return false;
+        }
+        rateLimits.put(ip, now);
+        return true;
+    }
+    
+    private static String sanitizeHTML(String input) {
+        if (input == null) return null;
+        return input.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&#x27;");
+    }
     
     // Check root and current dir for files
     private static String findFile(String name) {
@@ -22,21 +41,38 @@ public class WebServer {
     private static NutritionCSVReader csvReader = new NutritionCSVReader(findFile("nutrition.csv"));
     private static DishLogger dishLogger = new DishLogger(findFile("dishes_log.txt"));
 
+    // Resolve the absolute path to the frontend directory for path traversal protection
+    private static File frontendDir;
+    static {
+        File f = new File("frontend");
+        if (!f.exists()) f = new File("../frontend");
+        try {
+            frontendDir = f.getCanonicalFile();
+        } catch (IOException e) {
+            frontendDir = f.getAbsoluteFile();
+        }
+    }
+
     public static void main(String[] args) throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(PORT), 0);
 
         // API Handler for ingredient search (autocomplete)
         server.createContext("/api/search", (exchange) -> {
+            if (!checkRateLimit(exchange)) { sendResponse(exchange, 429, "{\"error\":\"Too Many Requests\"}", "application/json"); return; }
             String queryArg = exchange.getRequestURI().getQuery();
             String q = "";
             if (queryArg != null && queryArg.startsWith("q=")) {
-                q = URLDecoder.decode(queryArg.substring(2), "UTF-8");
+                q = sanitizeHTML(URLDecoder.decode(queryArg.substring(2), "UTF-8"));
             }
 
             List<String> results = csvReader.searchIngredients(q);
             StringBuilder json = new StringBuilder("[");
             for (int i = 0; i < results.size(); i++) {
-                json.append("\"").append(results.get(i)).append("\"");
+                // Escape ingredient name for JSON safety
+                String safeName = results.get(i)
+                        .replace("\\", "\\\\")
+                        .replace("\"", "\\\"");
+                json.append("\"").append(safeName).append("\"");
                 if (i < results.size() - 1) json.append(",");
             }
             json.append("]");
@@ -45,17 +81,19 @@ public class WebServer {
 
         // API Handler for ingredient lookup
         server.createContext("/api/lookup", (exchange) -> {
+            if (!checkRateLimit(exchange)) { sendResponse(exchange, 429, "{\"error\":\"Too Many Requests\"}", "application/json"); return; }
             String queryArg = exchange.getRequestURI().getQuery();
             String name = "";
             if (queryArg != null && queryArg.startsWith("name=")) {
-                name = URLDecoder.decode(queryArg.substring(5), "UTF-8");
+                name = sanitizeHTML(URLDecoder.decode(queryArg.substring(5), "UTF-8"));
             }
 
             double[] macros = csvReader.findIngredient(name);
             String response;
             if (macros != null) {
-                response = String.format("{\"name\":\"%s\",\"protein\":%.2f,\"carbs\":%.2f,\"fats\":%.2f}", 
-                                         name, macros[0], macros[1], macros[2]);
+                String safeName = name.replace("\\", "\\\\").replace("\"", "\\\"");
+                response = String.format("{\"name\":\"%s\",\"protein\":%.4f,\"carbs\":%.4f,\"fats\":%.4f}", 
+                                         safeName, macros[0], macros[1], macros[2]);
                 sendResponse(exchange, 200, response, "application/json");
             } else {
                 sendResponse(exchange, 404, "{\"error\":\"Not found\"}", "application/json");
@@ -64,6 +102,7 @@ public class WebServer {
 
         // API Handler for saving a dish
         server.createContext("/api/save", (exchange) -> {
+            if (!checkRateLimit(exchange)) { sendResponse(exchange, 429, "{\"error\":\"Too Many Requests\"}", "application/json"); return; }
             if ("POST".equalsIgnoreCase(exchange.getRequestMethod())) {
                 try {
                     InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
@@ -71,22 +110,29 @@ public class WebServer {
                     String body = br.lines().collect(Collectors.joining());
 
                     // Manual JSON parsing (brute force but slightly more robust)
-                    String dishName = extractJsonValue(body, "dishName");
-                    Dish dish = new Dish(dishName, 50);
+                    String dishName = sanitizeHTML(extractJsonValue(body, "name"));
+                    if (dishName == null || dishName.trim().isEmpty()) {
+                        sendResponse(exchange, 400, "{\"error\":\"Dish name is required\"}", "application/json");
+                        return;
+                    }
+
+                    Dish dish = new Dish(dishName);
 
                     if (body.contains("\"ingredients\":[")) {
                         String ingredientsPart = body.split("\"ingredients\":\\[")[1];
                         ingredientsPart = ingredientsPart.substring(0, ingredientsPart.indexOf("]"));
                         
-                        String[] ingredientObjects = ingredientsPart.split("\\},\\{");
-                        for (String obj : ingredientObjects) {
-                            String name = extractJsonValue(obj, "name");
-                            double weight = Double.parseDouble(extractJsonValue(obj, "weight"));
-                            double p = Double.parseDouble(extractJsonValue(obj, "proteinPerGram"));
-                            double c = Double.parseDouble(extractJsonValue(obj, "carbsPerGram"));
-                            double f = Double.parseDouble(extractJsonValue(obj, "fatsPerGram"));
-                            
-                            dish.addIngredient(new Ingredient(name, weight, p, c, f));
+                        if (!ingredientsPart.trim().isEmpty()) {
+                            String[] ingredientObjects = ingredientsPart.split("\\},\\{");
+                            for (String obj : ingredientObjects) {
+                                String ingName = sanitizeHTML(extractJsonValue(obj, "name"));
+                                double weight = Double.parseDouble(extractJsonValue(obj, "weight"));
+                                double p = Double.parseDouble(extractJsonValue(obj, "proteinPerGram"));
+                                double c = Double.parseDouble(extractJsonValue(obj, "carbsPerGram"));
+                                double f = Double.parseDouble(extractJsonValue(obj, "fatsPerGram"));
+                                
+                                dish.addIngredient(new Ingredient(ingName, weight, p, c, f));
+                            }
                         }
                     }
 
@@ -103,16 +149,28 @@ public class WebServer {
 
         // API Handler for adding a new ingredient to database
         server.createContext("/api/add-ingredient", (exchange) -> {
+            if (!checkRateLimit(exchange)) { sendResponse(exchange, 429, "{\"error\":\"Too Many Requests\"}", "application/json"); return; }
             if ("POST".equalsIgnoreCase(exchange.getRequestMethod())) {
                 try {
                     InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
                     BufferedReader br = new BufferedReader(isr);
                     String body = br.lines().collect(Collectors.joining());
 
-                    String name = extractJsonValue(body, "name");
+                    String name = sanitizeHTML(extractJsonValue(body, "name"));
+                    if (name == null || name.trim().isEmpty()) {
+                        sendResponse(exchange, 400, "{\"error\":\"Ingredient name is required\"}", "application/json");
+                        return;
+                    }
+
                     double p = Double.parseDouble(extractJsonValue(body, "proteinPerGram"));
                     double c = Double.parseDouble(extractJsonValue(body, "carbsPerGram"));
                     double f = Double.parseDouble(extractJsonValue(body, "fatsPerGram"));
+
+                    // Check for negative values
+                    if (p < 0 || c < 0 || f < 0) {
+                        sendResponse(exchange, 400, "{\"error\":\"Nutritional values cannot be negative\"}", "application/json");
+                        return;
+                    }
 
                     csvReader.addIngredientToCSV(name, p, c, f);
                     sendResponse(exchange, 200, "{\"status\":\"added\"}", "application/json");
@@ -124,28 +182,62 @@ public class WebServer {
             }
         });
 
+        // API Handler for deleting a logged dish
+        server.createContext("/api/delete-dish", (exchange) -> {
+            if (!checkRateLimit(exchange)) { sendResponse(exchange, 429, "{\"error\":\"Too Many Requests\"}", "application/json"); return; }
+            if ("DELETE".equalsIgnoreCase(exchange.getRequestMethod())) {
+                String queryArg = exchange.getRequestURI().getQuery();
+                String name = "";
+                if (queryArg != null && queryArg.startsWith("name=")) {
+                    name = sanitizeHTML(URLDecoder.decode(queryArg.substring(5), "UTF-8"));
+                }
+
+                if (name == null || name.trim().isEmpty()) {
+                    sendResponse(exchange, 400, "{\"error\":\"Dish name is required\"}", "application/json");
+                    return;
+                }
+
+                boolean deleted = dishLogger.deleteDish(name);
+                if (deleted) {
+                    sendResponse(exchange, 200, "{\"status\":\"deleted\"}", "application/json");
+                } else {
+                    sendResponse(exchange, 404, "{\"error\":\"Dish not found\"}", "application/json");
+                }
+            } else {
+                sendResponse(exchange, 405, "Method Not Allowed", "text/plain");
+            }
+        });
+
         // API Handler for retrieving logged dishes
         server.createContext("/api/logged-dishes", (exchange) -> {
+            if (!checkRateLimit(exchange)) { sendResponse(exchange, 429, "{\"error\":\"Too Many Requests\"}", "application/json"); return; }
             String json = dishLogger.getLoggedDishesJSON();
             sendResponse(exchange, 200, json, "application/json");
         });
 
-        // Static file handler
+        // Static file handler with path traversal protection
         server.createContext("/", (exchange) -> {
             String path = exchange.getRequestURI().getPath();
-            if (path.equals("/")) path = "/index.html";
+            if (path.equals("/")) path = "/landing.html";
             
             // Try different possible locations for frontend files
-            File file = new File("frontend" + path);
-            if (!file.exists()) file = new File("../frontend" + path);
-            if (!file.exists()) file = new File(path.substring(1)); // Current dir
+            File file = new File(frontendDir, path);
+
+            try {
+                // Path traversal protection: ensure resolved path is inside frontendDir
+                File canonicalFile = file.getCanonicalFile();
+                if (!canonicalFile.getPath().startsWith(frontendDir.getPath())) {
+                    sendResponse(exchange, 403, "403 Forbidden", "text/plain");
+                    return;
+                }
+                file = canonicalFile;
+            } catch (IOException e) {
+                sendResponse(exchange, 400, "400 Bad Request", "text/plain");
+                return;
+            }
 
             if (file.exists() && !file.isDirectory()) {
-                String contentType = "text/plain";
-                if (path.endsWith(".html")) contentType = "text/html";
-                else if (path.endsWith(".css")) contentType = "text/css";
-                else if (path.endsWith(".js")) contentType = "application/javascript";
-                
+                String contentType = getContentType(path);
                 byte[] bytes = Files.readAllBytes(file.toPath());
                 sendResponse(exchange, 200, bytes, contentType);
             } else {
@@ -156,6 +248,20 @@ public class WebServer {
         System.out.println("NutriDish Server started at http://localhost:" + PORT);
         server.setExecutor(null);
         server.start();
+    }
+
+    private static String getContentType(String path) {
+        if (path.endsWith(".html")) return "text/html; charset=UTF-8";
+        if (path.endsWith(".css")) return "text/css; charset=UTF-8";
+        if (path.endsWith(".js")) return "application/javascript; charset=UTF-8";
+        if (path.endsWith(".png")) return "image/png";
+        if (path.endsWith(".jpg") || path.endsWith(".jpeg")) return "image/jpeg";
+        if (path.endsWith(".gif")) return "image/gif";
+        if (path.endsWith(".svg")) return "image/svg+xml";
+        if (path.endsWith(".ico")) return "image/x-icon";
+        if (path.endsWith(".json")) return "application/json";
+        if (path.endsWith(".woff") || path.endsWith(".woff2")) return "font/woff2";
+        return "application/octet-stream";
     }
 
     private static String extractJsonValue(String json, String key) {
@@ -186,11 +292,22 @@ public class WebServer {
 
     private static void sendResponse(HttpExchange exchange, int statusCode, byte[] response, String contentType) throws IOException {
         exchange.getResponseHeaders().set("Content-Type", contentType);
-        // Fix for CORS (if needed, but local is fine)
-        exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+        // Security Headers (CORS, XSS, Frame Options)
+        exchange.getResponseHeaders().set("X-Frame-Options", "DENY");
+        exchange.getResponseHeaders().set("X-XSS-Protection", "1; mode=block");
+        exchange.getResponseHeaders().set("X-Content-Type-Options", "nosniff");
+        exchange.getResponseHeaders().set("Content-Security-Policy", "default-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com https://cdnjs.cloudflare.com https://unpkg.com https://cdn.jsdelivr.net; img-src 'self' data:;");
+        // Removed Access-Control-Allow-Origin: * to prevent cross-origin API access
+        exchange.getResponseHeaders().set("Cache-Control", "no-cache, no-store, must-revalidate");
+        exchange.getResponseHeaders().set("Pragma", "no-cache");
+        exchange.getResponseHeaders().set("Expires", "0");
+        
         exchange.sendResponseHeaders(statusCode, response.length);
         OutputStream os = exchange.getResponseBody();
         os.write(response);
         os.close();
     }
 }
+
+
+

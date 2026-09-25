@@ -1,94 +1,214 @@
 ingredient,protein_per_gram,carbs_per_gram,fats_per_gram
-Chicken Breast,0.31,0.0,0.036
-Rice,0.027,0.28,0.003
-Egg,0.13,0.0072,0.095
-Milk,0.034,0.047,0.038
-Paneer,0.18,0.016,0.20
-Potato,0.021,0.17,0.001
-Chapati,0.08,0.45,0.038
-Dal,0.09,0.17,0.004
-Oats,0.17,0.66,0.07
-Banana,0.011,0.23,0.003
-Almonds,0.21,0.22,0.49
-Curd,0.11,0.049,0.034
-Butter,0.0085,0.00085,0.81
-Olive Oil,0.0,0.0,1.0
-Broccoli,0.028,0.07,0.004
-Bread,0.08,0.5,0.03
-Sandwich,0.08,0.5,0.03
-Apple,0.003,0.138,0.002
-Banana,0.011,0.228,0.003
-Almonds,0.212,0.216,0.499
-Chicken Breast (raw),0.225,0.0,0.026
-Beef (lean ground),0.172,0.0,0.150
-Salmon (raw),0.200,0.0,0.130
-Egg (whole),0.126,0.007,0.095
-Milk (whole),0.032,0.048,0.033
-Rice (white cooked),0.027,0.287,0.003
-Oats (raw),0.132,0.677,0.069
-Broccoli,0.028,0.070,0.004
-Spinach,0.029,0.036,0.004
-Potato (raw),0.020,0.175,0.001
-Carrot,0.009,0.096,0.002
-Avocado,0.020,0.085,0.147
-Olive Oil,0.0,0.0,1.0
-Butter,0.009,0.001,0.811
-Cheese (Cheddar),0.249,0.013,0.331
-Yogurt (plain whole),0.035,0.047,0.033
-Peanut Butter,0.225,0.220,0.514
-Bread (white),0.08,0.506,0.033
-Pasta (dry),0.130,0.747,0.015
-Honey,0.003,0.824,0.0
-Sugar (white),0.0,1.0,0.0
-Quinoa (cooked),0.044,0.213,0.019
-Lentils (cooked),0.090,0.201,0.004
-Chickpeas (cooked),0.089,0.274,0.026
-Black Beans (cooked),0.089,0.237,0.005
-Tofu (firm),0.173,0.019,0.087
+Chicken Breast (raw),0.231,0.000,0.012
+Chicken Breast (cooked),0.310,0.000,0.036
+Chicken Thigh (raw),0.193,0.000,0.083
+Chicken Thigh (cooked),0.260,0.000,0.150
+Turkey Breast (raw),0.236,0.000,0.015
+Turkey Breast (cooked),0.301,0.000,0.021
+Beef (lean ground raw),0.194,0.000,0.056
+Beef (lean ground cooked),0.260,0.000,0.075
+Pork Chop (raw),0.210,0.000,0.063
+Salmon (raw),0.198,0.000,0.063
+Salmon (cooked),0.254,0.000,0.081
+Tuna (canned in water),0.255,0.000,0.008
+Tuna (fresh raw),0.233,0.000,0.049
+Cod (raw),0.178,0.000,0.007
 Shrimp (raw),0.203,0.002,0.017
-Turkey Breast (raw),0.210,0.0,0.010
+Shrimp (cooked),0.240,0.002,0.011
+Egg (whole raw),0.126,0.007,0.095
+Egg White (raw),0.109,0.007,0.002
+Milk (whole),0.032,0.048,0.033
+Milk (skim),0.034,0.050,0.002
+Yogurt (plain whole),0.035,0.047,0.033
+Greek Yogurt (plain nonfat),0.102,0.036,0.004
+Cottage Cheese (low fat),0.111,0.034,0.010
+Cheese (Cheddar),0.249,0.013,0.331
+Cheese (Mozzarella),0.222,0.022,0.224
+Paneer,0.180,0.012,0.208
+Butter,0.009,0.001,0.811
+Ghee,0.003,0.000,0.995
+Rice (white uncooked),0.071,0.800,0.007
+Rice (white cooked),0.027,0.282,0.003
+Rice (brown uncooked),0.079,0.772,0.029
+Rice (brown cooked),0.026,0.230,0.009
+Oats (rolled raw),0.132,0.677,0.069
+Quinoa (uncooked),0.141,0.642,0.061
+Quinoa (cooked),0.044,0.213,0.019
+Pasta (dry),0.130,0.747,0.015
+Pasta (cooked),0.058,0.309,0.009
+Bread (white),0.089,0.490,0.033
+Bread (whole wheat),0.125,0.427,0.041
+Potato (raw),0.020,0.175,0.001
+Potato (baked),0.025,0.212,0.001
+Sweet Potato (raw),0.016,0.201,0.001
+Sweet Potato (baked),0.020,0.207,0.001
+Lentils (raw),0.246,0.601,0.011
+Lentils (cooked),0.090,0.201,0.004
+Chickpeas (raw),0.205,0.630,0.060
+Chickpeas (cooked),0.089,0.274,0.026
+Black Beans (raw),0.216,0.624,0.014
+Black Beans (cooked),0.089,0.237,0.005
+Tofu (firm),0.173,0.028,0.087
+Tofu (silken),0.048,0.029,0.027
+Almonds,0.212,0.216,0.499
 Walnuts,0.152,0.137,0.652
+Cashews,0.182,0.302,0.438
+Peanuts,0.258,0.161,0.492
+Peanut Butter (smooth),0.251,0.200,0.504
+Almond Butter,0.210,0.188,0.555
 Chia Seeds,0.165,0.421,0.307
+Flax Seeds,0.183,0.289,0.422
 Pumpkin Seeds,0.302,0.107,0.490
-Blueberries,0.007,0.145,0.003
-Strawberries,0.007,0.077,0.003
-Cucumber,0.007,0.036,0.001
+Sunflower Seeds,0.208,0.200,0.515
+Olive Oil,0.000,0.000,1.000
+Coconut Oil,0.000,0.000,1.000
+Avocado,0.020,0.085,0.147
+Broccoli,0.028,0.070,0.004
+Spinach (raw),0.029,0.036,0.004
+Carrot (raw),0.009,0.096,0.002
 Tomato,0.009,0.039,0.002
+Cucumber,0.007,0.036,0.001
 Onion,0.011,0.093,0.001
 Garlic,0.064,0.331,0.005
-Sweet Potato,0.016,0.201,0.001
+Bell Pepper (Red),0.010,0.060,0.003
+Bell Pepper (Green),0.009,0.046,0.002
 Cabbage,0.013,0.058,0.001
-Bell Pepper,0.010,0.060,0.003
-Mushrooms,0.031,0.033,0.003
-Cod (raw),0.178,0.0,0.007
-Tuna (canned),0.235,0.0,0.010
-Greek Yogurt,0.102,0.036,0.004
-Cottage Cheese,0.111,0.034,0.010
-Sunflower Seeds,0.208,0.200,0.515
-Cashews,0.182,0.302,0.438
-Flax Seeds,0.183,0.289,0.422
-Green Peas,0.054,0.145,0.004
-Corn (sweet),0.032,0.190,0.012
-Asparagus,0.022,0.039,0.001
 Cauliflower,0.019,0.050,0.003
 Zucchini,0.012,0.031,0.003
 Celery,0.007,0.030,0.002
-Pineapple,0.005,0.131,0.001
-Watermelon,0.006,0.076,0.002
+Asparagus,0.022,0.039,0.001
+Green Peas,0.054,0.145,0.004
+Mushrooms (white),0.031,0.033,0.003
+Lettuce (Iceberg),0.009,0.030,0.001
+Kale (raw),0.043,0.088,0.009
+Apple,0.003,0.138,0.002
+Banana,0.011,0.228,0.003
 Orange,0.009,0.118,0.001
-Paneer,0.18,0.016,0.20
-Potato,0.021,0.17,0.001
-Chapati,0.08,0.45,0.038
-Dal,0.09,0.17,0.004
-Oats,0.17,0.66,0.07
-Banana,0.011,0.23,0.003
-Curd,0.11,0.049,0.034
-Butter,0.0085,0.00085,0.81
-Olive Oil,0.0,0.0,1.0
-Broccoli,0.028,0.07,0.004
-Bread,0.08,0.5,0.03
-Sandwich,0.08,0.5,0.03
-Dragonfruit,0.012,0.12300000000000001,0.004
-Dragonfruit,0.012,0.12300000000000001,0.004
-chocolate,0.03,0.3,0.6
-salt,0.01,0.2,0.2
+Strawberries,0.007,0.077,0.003
+Blueberries,0.007,0.145,0.003
+Raspberries,0.012,0.119,0.007
+Watermelon,0.006,0.076,0.002
+Pineapple,0.005,0.131,0.001
+Mango,0.008,0.150,0.004
+Grapes,0.007,0.181,0.002
+Dragonfruit,0.012,0.123,0.004
+Honey,0.003,0.824,0.000
+Sugar (white),0.000,1.000,0.000
+Maple Syrup,0.000,0.670,0.000
+Mayonnaise,0.010,0.006,0.750
+Ketchup,0.010,0.274,0.001
+Mustard,0.044,0.058,0.033
+Soy Sauce,0.081,0.049,0.006
+Salt,0.000,0.000,0.000
+Black Pepper,0.104,0.640,0.033
+Chocolate (Dark 70%),0.078,0.459,0.426
+Chocolate (Milk),0.077,0.594,0.297
+Ice Cream (Vanilla),0.035,0.236,0.110
+momos,0.02,0.5,0.4Ice Cream (Chocolate),0.038,0.250,0.115
+Ice Cream (Strawberry),0.032,0.240,0.100
+Ice Cream (Mint Chocolate Chip),0.035,0.245,0.120
+Ice Cream (Cookie Dough),0.040,0.260,0.130
+Ice Cream (Mango),0.030,0.250,0.090
+Ice Cream (Coffee),0.034,0.230,0.110
+Sprouts (Mung Bean),0.030,0.060,0.002
+Sprouts (Brussels raw),0.034,0.090,0.003
+Protein Bar,0.300,0.400,0.120
+Momos (Steamed Veg),0.030,0.200,0.020
+Momos (Steamed Chicken),0.080,0.180,0.030
+Momos (Fried Chicken),0.070,0.200,0.120
+Bacon (cooked),0.370,0.010,0.420
+Sausage (Pork cooked),0.190,0.020,0.280
+Sausage (Chicken cooked),0.210,0.030,0.140
+Ham (sliced),0.170,0.020,0.050
+Turkey (Deli sliced),0.160,0.040,0.020
+Tofu (Fried),0.160,0.090,0.200
+Tempeh,0.190,0.090,0.110
+Seitan,0.750,0.140,0.020
+Lobster (cooked),0.190,0.000,0.010
+Crab (cooked),0.190,0.000,0.010
+Scallops (cooked),0.200,0.050,0.010
+Mussels (cooked),0.240,0.070,0.040
+Oysters (raw),0.090,0.040,0.020
+Pita Bread,0.090,0.550,0.010
+Tortilla (Flour),0.080,0.490,0.070
+Tortilla (Corn),0.060,0.450,0.030
+Bagel (Plain),0.100,0.530,0.020
+Croissant,0.080,0.460,0.210
+Muffin (Blueberry),0.050,0.520,0.150
+Pancake (Plain),0.060,0.280,0.100
+Waffle (Plain),0.070,0.330,0.140
+Pizza (Cheese),0.110,0.330,0.100
+Burger (Beef patty only),0.250,0.000,0.200
+Fries (French Fries),0.030,0.410,0.150
+Potato Chips,0.070,0.530,0.350
+Tortilla Chips,0.070,0.640,0.240
+Popcorn (Air popped),0.130,0.780,0.050
+Hummus,0.080,0.140,0.100
+Guacamole,0.020,0.090,0.150
+Salsa,0.010,0.070,0.000
+Pesto,0.050,0.130,0.450
+Tomato Sauce (Marinara),0.020,0.070,0.020
+Cream Cheese,0.060,0.040,0.340
+Sour Cream,0.020,0.050,0.190
+Heavy Cream,0.020,0.030,0.370
+Almond Milk (Unsweetened),0.005,0.010,0.010
+Soy Milk (Unsweetened),0.030,0.020,0.020
+Oat Milk,0.010,0.070,0.015
+Coconut Milk (Canned),0.020,0.030,0.210
+Protein Powder (Whey),0.780,0.100,0.050
+Protein Powder (Plant),0.700,0.150,0.070
+Beef Jerky,0.330,0.110,0.260
+Olives (Green),0.010,0.040,0.150
+Olives (Black),0.010,0.060,0.110
+Pickles (Dill),0.005,0.020,0.000
+Kimchi,0.015,0.025,0.005
+Sauerkraut,0.010,0.040,0.000
+Edamame (cooked),0.110,0.100,0.050
+Pine Nuts,0.140,0.130,0.680
+Pistachios,0.200,0.280,0.450
+Macadamia Nuts,0.080,0.140,0.760
+Pecans,0.090,0.140,0.720
+Dates (Medjool),0.020,0.750,0.000
+Raisins,0.030,0.790,0.000
+Dried Cranberries,0.000,0.820,0.010
+Apricots (Dried),0.030,0.630,0.010
+Figs (Dried),0.030,0.640,0.010
+Prunes,0.020,0.640,0.000
+Kiwifruit,0.010,0.150,0.010
+Peach,0.010,0.100,0.000
+Plum,0.010,0.110,0.000
+Pear,0.005,0.150,0.000
+Cherry (Sweet),0.010,0.160,0.000
+Grapefruit,0.010,0.110,0.000
+Lemon (Juice),0.005,0.090,0.000
+Lime (Juice),0.005,0.080,0.000
+Cantaloupe,0.010,0.080,0.000
+Honeydew,0.005,0.090,0.000
+Papaya,0.005,0.110,0.000
+Pomegranate,0.020,0.190,0.010
+Blackberries,0.015,0.100,0.005
+Green Beans,0.020,0.070,0.000
+Brussels Sprouts (cooked),0.030,0.070,0.000
+Cabbage (Red),0.015,0.070,0.000
+Bok Choy,0.015,0.020,0.000
+Eggplant,0.010,0.060,0.000
+Squash (Butternut),0.010,0.120,0.000
+Squash (Spaghetti),0.010,0.070,0.000
+Pumpkin,0.010,0.070,0.000
+Artichoke,0.030,0.110,0.000
+Leek,0.015,0.140,0.000
+Radish,0.010,0.030,0.000
+Turnip,0.010,0.060,0.000
+Beetroot,0.015,0.100,0.000
+Parsnip,0.010,0.180,0.000
+Ginger (Root),0.020,0.180,0.010
+Turmeric (Ground),0.080,0.650,0.100
+Cinnamon (Ground),0.040,0.810,0.010
+Cocoa Powder (Unsweetened),0.200,0.580,0.140
+Vanilla Extract,0.000,0.130,0.000
+Vinegar (Balsamic),0.005,0.170,0.000
+Vinegar (Apple Cider),0.000,0.010,0.000
+Hot Sauce,0.010,0.020,0.000
+Sriracha,0.020,0.200,0.010
+Teriyaki Sauce,0.060,0.160,0.000
+BBQ Sauce,0.010,0.410,0.010

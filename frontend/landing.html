@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriDish | Stop Guessing Your Macros</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <meta name="description" content="The frictionless macro tracker built for home chefs and meal-preppers. Calculate protein, carbs, and fats for any custom recipe in seconds.">
+    <link rel="stylesheet" href="landing.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body>
+
+    <!-- Background Orbs -->
+
+    <!-- Logo -->
+    <a href="#" class="brand" style="position: absolute; top: 1.5rem; left: 5%; z-index: 100; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; color: var(--text-main);">
+        <img src="logo.png" alt="NutriDish Logo" style="height: 40px;">
+        <div style="font-size: 1.8rem; font-weight: 800; letter-spacing: -1px;">Nutri<span style="color: var(--primary);">Dish</span></div>
+    </a>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Stop Guessing Your Macros. <br><span>Know Exactly What's in Your Meal.</span></h1>
+            <p class="hero-subtitle">The frictionless macro tracker built for fitness enthusiasts and meal-preppers. Instantly calculate protein, carbs, and fats for your custom recipes and save them to your daily log.</p>
+            <div class="hero-actions">
+                <a href="/index.html" class="btn-primary">Analyze a Recipe for Free</a>
+            </div>
+        </div>
+        
+        <div class="hero-visual">
+            <div class="mockup-card">
+                <div class="mockup-header">
+                    <div class="mockup-title">Spicy Chicken Bowl</div>
+                    <div class="macro-ring"></div>
+                </div>
+                <div class="mockup-stats">
+                    <div class="stat-box">
+                        <div class="stat-value">48g</div>
+                        <div class="stat-label">PROTEIN</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">62g</div>
+                        <div class="stat-label">CARBS</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">12g</div>
+                        <div class="stat-label">FATS</div>
+                    </div>
+                </div>
+                <div class="mockup-list">
+                    <div class="mockup-item">
+                        <span>Chicken Breast (raw)</span>
+                        <span style="color: var(--text-muted)">150g</span>
+                    </div>
+                    <div class="mockup-item">
+                        <span>White Rice (cooked)</span>
+                        <span style="color: var(--text-muted)">200g</span>
+                    </div>
+                    <div class="mockup-item">
+                        <span>Olive Oil</span>
+                        <span style="color: var(--text-muted)">10g</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works">
+        <div class="section-header">
+            <h2 class="section-title">Frictionless Tracking in 3 Steps</h2>
+            <p class="section-subtitle">We designed NutriDish to be the fastest way to log complex, multi-ingredient meals without the headache.</p>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card gs-step">
+                <div class="step-icon">
+                    <i class="fa-solid fa-bowl-food"></i>
+                </div>
+                <h3 class="step-title">1. Name Your Dish</h3>
+                <p style="color: var(--text-muted);">Start by giving your culinary creation a name. Whether it's your famous lasagna or a quick protein shake, you own the recipe.</p>
+            </div>
+            <div class="step-card gs-step">
+                <div class="step-icon">
+                    <i class="fa-solid fa-scale-unbalanced"></i>
+                </div>
+                <h3 class="step-title">2. Add Ingredients</h3>
+                <p style="color: var(--text-muted);">Search our comprehensive database and input the raw weights. We instantly compile the exact macro breakdown.</p>
+            </div>
+            <div class="step-card gs-step">
+                <div class="step-icon">
+                    <i class="fa-solid fa-chart-pie"></i>
+                </div>
+                <h3 class="step-title">3. Save & Track</h3>
+                <p style="color: var(--text-muted);">Save the dish to your personal log. Build your own library of go-to meals to hit your goals effortlessly every day.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features">
+        <div class="features-grid">
+            <div class="feature-visual gs-fade-right">
+                <img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Meal Prep" style="width: 100%; border-radius: 12px; filter: contrast(1.1) saturate(1.2);">
+            </div>
+            <div class="feature-content gs-fade-left">
+                <h3>Better Than Standard Calorie Trackers</h3>
+                <p>Generic trackers force you to search for "Chicken Bowl" and guess the portion size. NutriDish lets you build the bowl from the ground up for 100% accuracy.</p>
+                <ul class="feature-list">
+                    <li><i class="fa-solid fa-circle-check"></i> <strong>Highly Accurate:</strong> Based on raw ingredient weights.</li>
+                    <li><i class="fa-solid fa-circle-check"></i> <strong>Lightning Fast:</strong> Smart autocomplete for quick logging.</li>
+                    <li><i class="fa-solid fa-circle-check"></i> <strong>Custom Recipes:</strong> Create once, log forever.</li>
+                    <li><i class="fa-solid fa-circle-check"></i> <strong>No Ads, No Clutter:</strong> A clean, premium experience.</li>
+                </ul>
+                <a href="/index.html" class="btn-primary" style="margin-top: 1rem;">Experience the Difference</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="cta-section">
+        <h2 class="cta-title">Ready to Hit Your Macros?</h2>
+        <p class="section-subtitle" style="margin-bottom: 2.5rem; max-width: 600px; margin-left: auto; margin-right: auto;">Join thousands of home chefs taking the guesswork out of their nutrition. No credit card required.</p>
+        <a href="/index.html" class="btn-primary" style="font-size: 1.2rem; padding: 1rem 2.5rem;">Start Tracking Now</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="brand" style="text-decoration: none; display: flex; align-items: center; gap: 0.8rem; color: var(--text-main); margin-bottom: 1.5rem;">
+            <img src="logo.png" alt="NutriDish Logo" style="height: 32px;">
+            <div style="font-size: 1.5rem; font-weight: 800; letter-spacing: -1px;">Nutri<span style="color: var(--primary);">Dish</span></div>
+        </div>
+        <div class="footer-links">
+            <a href="/privacy.html">Privacy Policy</a>
+            <a href="/terms.html">Terms of Service</a>
+        </div>
+        <div class="footer-copy">
+            &copy; 2026 NutriDish. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- Move to Top Button -->
+    <button onclick="topFunction()" id="moveToTopBtn" title="Go to top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="19" x2="12" y2="5"></line>
+            <polyline points="5 12 12 5 19 12"></polyline>
+        </svg>
+    </button>
+
+    <!-- Animations Script -->
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Hero Animations
+        gsap.from(".hero-label", { opacity: 0, y: -20, duration: 0.8, ease: "power3.out" });
+        gsap.from(".hero-title", { opacity: 0, y: 30, duration: 1, delay: 0.2, ease: "power3.out" });
+        gsap.from(".hero-subtitle", { opacity: 0, y: 20, duration: 1, delay: 0.4, ease: "power3.out" });
+        gsap.from(".hero-actions", { opacity: 0, y: 20, duration: 1, delay: 0.6, ease: "power3.out" });
+        gsap.from(".mockup-card", { opacity: 0, x: 50, rotationY: 15, duration: 1.5, delay: 0.4, ease: "power3.out" });
+
+        // Scroll Animations
+        gsap.utils.toArray('.gs-step').forEach((step, i) => {
+            gsap.from(step, {
+                scrollTrigger: {
+                    trigger: step,
+                    start: "top 80%",
+                },
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                delay: i * 0.2,
+                ease: "back.out(1.5)"
+            });
+        });
+
+        gsap.from(".gs-fade-right", {
+            scrollTrigger: {
+                trigger: "#features",
+                start: "top 70%",
+            },
+            x: -50,
+            opacity: 0,
+            duration: 1,
+            ease: "power3.out"
+        });
+
+        gsap.from(".gs-fade-left", {
+            scrollTrigger: {
+                trigger: "#features",
+                start: "top 70%",
+            },
+            x: 50,
+            opacity: 0,
+            duration: 1,
+            ease: "power3.out"
+        });
+
+        // Move to Top Logic
+        let mybutton = document.getElementById("moveToTopBtn");
+        window.onscroll = function() {scrollFunction()};
+
+        // Check on load
+        scrollFunction();
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                mybutton.classList.add("show");
+            } else {
+                mybutton.classList.remove("show");
+            }
+        }
+
+        function topFunction() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+    </script>
+</body>
+</html>
