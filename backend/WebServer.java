@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class WebServer {
 
-    private static final int PORT = 8080;
+    private static final int PORT = System.getenv("PORT") != null ? Integer.parseInt(System.getenv("PORT")) : 8080;
     private static final Map<String, Long> rateLimits = new ConcurrentHashMap<>();
     
     private static boolean checkRateLimit(HttpExchange exchange) {
@@ -308,6 +308,7 @@ public class WebServer {
         os.close();
     }
 }
+
 
 
 
