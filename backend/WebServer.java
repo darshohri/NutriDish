@@ -302,10 +302,14 @@ public class WebServer {
         exchange.getResponseHeaders().set("Pragma", "no-cache");
         exchange.getResponseHeaders().set("Expires", "0");
         
-        exchange.sendResponseHeaders(statusCode, response.length);
-        OutputStream os = exchange.getResponseBody();
-        os.write(response);
-        os.close();
+        if ("HEAD".equalsIgnoreCase(exchange.getRequestMethod())) {
+            exchange.sendResponseHeaders(statusCode, -1);
+        } else {
+            exchange.sendResponseHeaders(statusCode, response.length);
+            OutputStream os = exchange.getResponseBody();
+            os.write(response);
+            os.close();
+        }
     }
 }
 
